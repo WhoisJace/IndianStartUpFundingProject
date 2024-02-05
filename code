@@ -1,0 +1,468 @@
+SELECT *
+FROM IndianStartFunding
+--  Data Exploration
+SELECT DISTINCT Industry_Vertical, COUNT(Industry_Vertical) AS industrverticalcount
+FROM IndianStartFunding
+GROUP BY Industry_Vertical
+ORDER BY industrverticalcount DESC
+-- Theres alot of different industry verticals that are the same thing. Therefore they can be consolidated.
+
+SELECT DISTINCT City_Location, COUNT(City_Location) AS citylocationcount
+FROM IndianStartFunding
+GROUP BY City_Location
+ORDER BY citylocationcount DESC
+-- Again more Consolidation and correcting spelling errors. There are a handful that are multiple cities. Deciding whether to make it 'Multiple Cities' or just make it the first city as the location.
+
+SELECT DISTINCT Investment_Type, COUNT(Investment_Type) AS investmenttypecount
+FROM IndianStartFunding
+GROUP BY Investment_Type
+ORDER BY investmenttypecount DESC
+-- More Consolodation.
+
+SELECT DISTINCT Investors_Name, COUNT(Investors_Name) AS investorsnamecount
+FROM IndianStartFunding
+GROUP BY Investors_Name
+ORDER BY investorsnamecount DESC
+-- More Consolodation.
+-- There is potential to make it 'Multiple Investors' especically when there is more than 2 investors or I can take just the first investor as the main investor.
+-- In addition I can leave it as is.
+
+SELECT Amount_in_USD
+FROM IndianStartFunding
+
+
+--
+SELECT *
+FROM IndianStartFunding
+--
+
+--Data Cleaning
+-- Converted the date and removed the old date column
+SELECT Date, CONVERT(Date, Date)
+FROM IndianStartFunding
+
+update IndianStartFunding
+SET dateconverted = CONVERT(Date, Date)
+
+ALTER TABLE IndianStartFunding
+Add dateconverted Date;
+
+ALTER TABLE IndianStartFunding
+DROP COLUMN Date;
+-- removed the Sub_vertical Column seeing that it posed no use to answer the questions.
+
+
+ALTER TABLE IndianStartFunding
+DROP COLUMN Sub_Vertical;
+
+-- Cleaning the Industry Vertical 
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE 'AI%' OR Industry_Vertical LIKE '%App' OR Industry_Vertical LIKE '%Artificial Intelligence%' OR Industry_Vertical LIKE '%3D Printer Manufacturer%' OR Industry_Vertical LIKE '%brewery%'
+OR Industry_Vertical LIKE '%Device Repair Svcs%' OR Industry_Vertical LIKE '%Engineering%' OR Industry_Vertical LIKE '%Smartwatch Maker%' OR Industry_Vertical LIKE '%Robotic%'
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Food & Beverage'
+WHERE Industry_Vertical LIKE '%dining%' OR Industry_Vertical LIKE '%resturant%' OR Industry_Vertical LIKE '%food%' OR Industry_Vertical LIKE '%caf%' OR Industry_Vertical LIKE '%brewery%'
+OR Industry_Vertical LIKE 'dining%' OR Industry_Vertical LIKE '%dining' OR Industry_Vertical LIKE 'cafs%' OR Industry_Vertical LIKE '%brewery%'
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Education'
+WHERE Industry_Vertical LIKE '%school%' OR Industry_Vertical LIKE 'school%' OR Industry_Vertical LIKE '%school' OR Industry_Vertical LIKE '%education%' OR Industry_Vertical LIKE '%e-Learning%'
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%mobile%' OR Industry_Vertical LIKE 'mobile%' OR Industry_Vertical LIKE '%mobile'
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%Data%' OR Industry_Vertical LIKE 'Data%' OR Industry_Vertical LIKE '%Data';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%on-demand%' OR Industry_Vertical LIKE '%on demand%' OR Industry_Vertical LIKE '%ondemand%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Hospitality'
+WHERE Industry_Vertical LIKE '%Hotel%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'SaaS'
+WHERE Industry_Vertical LIKE '%soft%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Media and Entertainment'
+WHERE Industry_Vertical LIKE '%Video%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Healthcare'
+WHERE Industry_Vertical LIKE '%Beauty%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Real Estate'
+WHERE Industry_Vertical LIKE '%Home%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Food & Beverage'
+WHERE Industry_Vertical LIKE '%food%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'E-Commerce'
+WHERE Industry_Vertical LIKE '%marketplace%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'SaaS'
+WHERE Industry_Vertical LIKE '%platform%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Automotive'
+WHERE Industry_Vertical LIKE '%car rental%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Media and Entertainment'
+WHERE Industry_Vertical LIKE '%social network%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Media and Entertainment'
+WHERE Industry_Vertical LIKE '%entertainment%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Media and Entertainment'
+WHERE Industry_Vertical LIKE '%media%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Logistics'
+WHERE Industry_Vertical LIKE '%Logistics%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%tech%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Education'
+WHERE Industry_Vertical LIKE '%Edu%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Energy'
+WHERE Industry_Vertical LIKE '%Energy%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Finance'
+WHERE Industry_Vertical LIKE '%Finance%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Healthcare'
+WHERE Industry_Vertical LIKE '%healthcare%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%app';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Technology'
+WHERE Industry_Vertical LIKE '%mobile app%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Real Estate'
+WHERE Industry_Vertical LIKE '%Real Estate%';
+
+UPDATE IndianStartFunding		
+SET Industry_Vertical = 'Hyperlocal Services'
+WHERE Industry_Vertical LIKE '%Hyperlocal%';
+
+UPDATE IndianStartFunding
+SET Industry_Vertical =
+	CASE 
+		WHEN Industry_Vertical = 'Consumer Internet' THEN 'Technology'
+		WHEN Industry_Vertical = 'Fintech' THEN 'Finance'
+		ELSE Industry_Vertical
+	END;
+UPDATE IndianStartFunding
+SET Industry_Vertical =
+	CASE 
+		WHEN Industry_Vertical = 'Consumer Internet' THEN 'Technology'
+		WHEN Industry_Vertical = 'Fin-Tech' THEN 'Finance'
+		WHEN Industry_Vertical = 'Logistics Tech' THEN 'Logistics'
+		WHEN Industry_Vertical = 'Ed-Tech' THEN 'Education'
+		WHEN Industry_Vertical = 'IT' THEN 'Technology'
+		WHEN Industry_Vertical = 'Health and Wellness' THEN 'Healthcare'
+		WHEN Industry_Vertical = 'Food and Beverage' THEN 'Food & Beverage'
+		WHEN Industry_Vertical = 'Edtech' THEN 'Education'
+		WHEN Industry_Vertical = 'Information Technology' THEN 'Technology'
+		WHEN Industry_Vertical = 'Food Delivery Platform' THEN 'Food & Beverage'
+		WHEN Industry_Vertical = 'Transport' THEN 'Transportation'
+		WHEN Industry_Vertical = 'Food & Beverages' THEN 'Food & Beverage'
+		WHEN Industry_Vertical = 'Food and Beverages' THEN 'Food & Beverage'
+		WHEN Industry_Vertical = 'Software' THEN 'SaaS'
+		WHEN Industry_Vertical = 'Food' THEN 'Food & Beverage'
+		WHEN Industry_Vertical = 'residential rental management platform' THEN 'Real Estate'
+		WHEN Industry_Vertical = 'Hyperlocal Handyman Services' THEN 'Hyperlocal Services'
+		WHEN Industry_Vertical = 'Two-Wheeler Taxi Service' THEN 'Transportation'
+		WHEN Industry_Vertical = 'Tech' THEN 'Technology'
+		WHEN Industry_Vertical = 'Travel Tech' THEN 'Technology'
+		WHEN Industry_Vertical = 'FMCG' THEN 'E-Commerce'
+		WHEN Industry_Vertical = 'Used Car Marketplace' THEN 'Automotive'
+		WHEN Industry_Vertical = 'Last Mile Transportation' THEN 'Transportation'
+		WHEN Industry_Vertical = 'Mobile Fitness App' THEN 'Technology'
+		WHEN Industry_Vertical = 'Mobile Fitness App' THEN 'Healthcare'
+		WHEN Industry_Vertical = 'Cab Aggregator' THEN 'Transportation'
+		ELSE Industry_Vertical
+	END;
+
+-- cleaning city location
+SELECT DISTINCT City_Location
+FROM IndianStartFunding
+ORDER BY City_Location
+
+-- Extract everything before the first '/'
+SELECT City_Location AS Location,
+    LEFT(City_Location, CHARINDEX('/', City_Location + '/') - 1) AS ExtractedPart
+FROM IndianStartFunding
+
+
+SELECT DISTINCT ExtractedPart, COUNT(ExtractedPart) AS LocationCount
+FROM (SELECT 
+          City_Location,
+          LEFT(City_Location, CHARINDEX('/', City_Location + '/') - 1) AS ExtractedPart
+      FROM IndianStartFunding) AS Subquery
+GROUP BY ExtractedPart
+ORDER BY ExtractedPart
+
+-- Create a temporary table to store the extracted values
+SELECT 
+    City_Location,
+    LEFT(City_Location, CHARINDEX('/', City_Location + '/') - 1) AS ExtractedPart
+INTO #TempTable
+FROM IndianStartFunding;
+
+-- Update the original table using the extracted values
+UPDATE IndianStartFunding
+SET City_Location = ExtractedPart
+FROM IndianStartFunding
+JOIN #TempTable ON IndianStartFunding.City_Location = #TempTable.City_Location;
+
+-- Drop the temporary table
+DROP TABLE #TempTable;
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Bangalore'
+WHERE City_Location LIKE 'Bengaluru' 
+
+UPDATE IndianStartFunding		
+SET City_Location = 'United States'
+WHERE City_Location LIKE 'US' OR City_Location LIKE 'USA'
+
+UPDATE IndianStartFunding		
+SET City_Location = 'San Francisco'
+WHERE City_Location LIKE 'SFO '
+
+UPDATE IndianStartFunding		
+SET City_Location = 'New York'
+WHERE City_Location LIKE 'New York' OR City_Location LIKE 'New York, Bengaluru'
+
+UPDATE IndianStartFunding		
+SET City_Location = 'New York'
+WHERE City_Location LIKE 'New York' OR City_Location LIKE 'New York, Bengaluru'
+
+UPDATE IndianStartFunding		
+SET City_Location = 'New Delhi'
+WHERE City_Location LIKE 'New Delhi' OR City_Location LIKE 'Nw Delhi' 
+
+UPDATE IndianStartFunding
+SET City_Location =
+	CASE 
+		WHEN City_Location = 'Missourie' THEN 'Missouri'
+		ELSE City_Location
+	END;
+
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Kolkata'
+WHERE City_Location LIKE 'Kolkata' OR City_Location LIKE 'Kolkatta' 
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Delhi'
+WHERE City_Location LIKE 'Delhi' OR City_Location LIKE 'Delhi & Cambridge' 
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Bhubaneswar'
+WHERE City_Location LIKE 'Bhubaneswar' OR City_Location LIKE 'Bhubneswar' 
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Bengaluru'
+WHERE City_Location LIKE 'Bengaluru' OR City_Location LIKE 'Bengaluru and Gurugram'
+
+UPDATE IndianStartFunding		
+SET City_Location = 'Ahmedabad'
+WHERE City_Location LIKE 'Ah%' OR City_Location LIKE '%Ah' OR City_Location LIKE '%Ah%'
+
+
+
+
+-- Cleaning Investment Type Column
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Seed/Angel Funding'
+WHERE Investment_Type LIKE '%Seed/%' 
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Seed/Angel Funding'
+WHERE Investment_Type LIKE '%Seed /%' 
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Seed/Angel Funding'
+WHERE Investment_Type LIKE '%Angel /%'
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Seed Funding'
+WHERE Investment_Type = 'Seed Round' OR Investment_Type = 'Seed' OR Investment_Type = 'Seed Funding Round'
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Angel Funding'
+WHERE Investment_Type = 'Angel' OR Investment_Type = 'Angel Round'
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Private Equity'
+WHERE Investment_Type = 'Private Equity Round' OR Investment_Type = 'Private Funding' OR Investment_Type = 'Private' OR Investment_Type = 'PrivateEquity'
+
+UPDATE IndianStartFunding
+SET Investment_Type = 'Equity Based Funding'
+WHERE Investment_Type = 'Equity'
+
+
+
+
+-- Clean up of Investors_Name
+
+UPDATE IndianStartFunding
+SET Investors_Name = 'SoftBank Group'
+WHERE Investors_Name = 'Softbank' OR Investors_Name = 'Softbank Vision Fund'
+
+UPDATE IndianStartFunding
+SET Investors_Name = 'Undisclosed investors'
+WHERE Investors_Name = 'Undisclosed' OR Investors_Name = 'undisclosed investor'
+
+SELECT *
+FROM IndianStartFunding
+
+
+
+
+
+--Answering the posed questions.
+--Q1: How much funds does startups generally get in India?
+CREATE TABLE #TempIndianStartFunding(
+Startup_Name nvarchar(225),
+Industry_Vertical nvarchar(225),
+City_Location nvarchar(255),
+Investors_Name nvarchar(255),
+Investment_Type nvarchar(255),
+Amount_in_USD int,
+dateconverted nvarchar(255)) 
+
+ALTER TABLE #TempIndianStartFunding
+ALTER COLUMN Amount_in_USD float;
+
+INSERT INTO #TempIndianStartFunding
+SELECT *
+FROM IndianStartFunding
+WHERE Amount_in_USD IS NOT NULL
+
+SELECT *
+FROM #TempIndianStartFunding
+
+SELECT ROUND(AVG(Amount_in_USD),2) AS averagefunds
+FROM #TempIndianStartFunding
+ -- On average, startups receive approximately $19,031,796.64 USD --
+
+
+ --Q2: Do cities play a major role in funding
+SELECT DISTINCT City_Location, ROUND(SUM(Amount_in_USD),0) AS LocationFunding
+FROM IndianStartFunding
+WHERE City_Location IS NOT NULL
+GROUP BY City_Location
+ORDER BY LocationFunding DESC
+ -- The size and prominence of an investor's location appear to correlate with the amount of funding provided to startups. Bangalore, as the third-largest city in India and the 27th largest city globally, exemplifies this trend by attracting significant investment in startup ventures--
+
+
+
+ --Q3: Who are the important investors in the Indian Ecosystem?
+
+SELECT
+    TRIM(value) AS InvestorsNameSplit
+FROM
+    IndianStartFunding
+CROSS APPLY
+    STRING_SPLIT(Investors_Name, ',');
+
+-- Important Investors based off of number of Startups they invested in 
+SELECT DISTINCT TOP 10
+    InvestorsNameSplit,
+    COUNT(InvestorsNameSplit) AS StartUpsInvestedIn,
+    SUM(Amount_in_USD) AS TotalAmountInvested
+FROM (
+    SELECT
+        TRIM(value) AS InvestorsNameSplit,
+        Amount_in_USD
+    FROM
+        IndianStartFunding
+    CROSS APPLY
+        STRING_SPLIT(Investors_Name, ',')
+    WHERE
+        TRIM(value) NOT IN ('Undisclosed Investors', '','N/A')
+) AS Subquery
+GROUP BY InvestorsNameSplit
+ORDER BY StartUpsInvestedIn DESC;
+
+-- Important Investors based off of amount invested into Startups
+
+SELECT DISTINCT TOP 10
+    InvestorsNameSplit,
+    COUNT(InvestorsNameSplit) AS StartUpsInvestedIn,
+    SUM(Amount_in_USD) AS TotalAmountInvested
+FROM (
+    SELECT
+        TRIM(value) AS InvestorsNameSplit,
+        Amount_in_USD
+    FROM
+        IndianStartFunding
+    CROSS APPLY
+        STRING_SPLIT(Investors_Name, ',')
+    WHERE
+        TRIM(value) NOT IN ('Undisclosed Investors', '','N/A')
+) AS Subquery
+GROUP BY InvestorsNameSplit
+ORDER BY TotalAmountInvested DESC;
+
+-- When assessing importance, two distinct criteria were considered: the number of startups in which the investor invested and the total monetary contribution made by investors. To comprehensively analyze both aspects, the study examined both metrics. Accel Partners emerged with the highest number of investments, while SoftBank Group led in terms of the total amount invested in startups.
+
+
+
+--Q4: Which industries are favored by investors for funding?
+SELECT DISTINCT TOP 10 Industry_Vertical, COUNT(Industry_Vertical) AS Numberofinvestments, ROUND(SUM(Amount_in_USD), 0) amountinUSD
+FROM IndianStartFunding
+GROUP BY Industry_Vertical
+ORDER BY Numberofinvestments DESC
+-- Technology attracted the highest number of investments, whereas E-Commerce secured the largest total investment amount.--
+
+
+
+
+--Q5: How does the funding ecosystem change with time?
+WITH RankedData AS (
+    SELECT
+        YEAR(dateconverted) AS Year,
+        Investment_Type,
+        SUM(Amount_in_USD) AS TotalAmount,
+        ROW_NUMBER() OVER (PARTITION BY YEAR(dateconverted) ORDER BY SUM(Amount_in_USD) DESC) AS DataRank
+    FROM IndianStartFunding
+    GROUP BY YEAR(dateconverted), Investment_Type
+)
+SELECT
+    Year,
+    Investment_Type,
+    TotalAmount
+FROM RankedData
+WHERE DataRank = 1;
+
+-- Between 2015 and 2020, the investment landscape experienced fluctuations, yet exhibited an overall decline over the five-year period. Private Equity emerged as the dominant investment type in each year, except for 2019 when Series B investments took precedence. --
